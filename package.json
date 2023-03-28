@@ -18,5 +18,7 @@
   },
   "homepage": "https://github.com/peteradeojo/crm-project#readme",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.1"
+  }
 }

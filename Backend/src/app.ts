@@ -7,6 +7,9 @@ if (app.get('env') !== 'production') {
   app.use(require('morgan')('dev'));
 }
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 app.use('/auth', AuthRouter());
 
 export default app;

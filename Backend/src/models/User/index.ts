@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { compareSync, hashSync } from 'bcrypt';
 
 import IUser from './.d';
 
@@ -19,10 +20,6 @@ const userSchema = new Schema<IUser>({
   avatar: {
     type: String
   },
-  date: {
-    type: Date,
-    default: Date.now
-  },
   provider: {
     type: String,
     required: true
@@ -31,5 +28,24 @@ const userSchema = new Schema<IUser>({
   timestamps: true
 });
 
+userSchema.pre<IUser>('save', function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+
+  this.password = hashSync(this.password, 10);
+  next();
+});
+
+userSchema.methods.comparePassword = function (password: string) {
+  return compareSync(password, this.password);
+}
+
+userSchema.methods.resetPassword = function (password: string) {
+  this.password = hashSync(password, 10);
+  this.save();
+}
+
 const User = mongoose.model<IUser>('User', userSchema);
+
 export default User;
