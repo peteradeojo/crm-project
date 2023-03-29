@@ -1,26 +1,32 @@
 import { NextFunction } from "express"
 import { IRequest, IResponse } from "../../interfaces"
 import IUser from "../../models/User/.d";
+import User from "../../models/User";
 import { verify } from 'jsonwebtoken';
 
 import RedisConnection from "../../controllers/redis"
 
-export const validateToken = (req: IRequest, res: IResponse, next: NextFunction) => {
+export const validateToken = async (req: IRequest, res: IResponse, next: NextFunction) => {
   const bearerToken = req.headers.authorization?.split(" ")[1];
   if (!bearerToken) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
   try {
-    const decoded = verify(bearerToken, process.env.JWT_SECRET!);
-    req.user = decoded as IUser;
+    const decoded = verify(bearerToken, process.env.JWT_SECRET!) as { id: string, iat: number, exp: number };
+    // req.user = decoded as IUser;
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    req.user = user;
     next();
   } catch (err: any) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 }
 
-export const rateLimit = async (req: IRequest, res: IResponse, next: NextFunction) => { 
+export const rateLimit = async (req: IRequest, res: IResponse, next: NextFunction) => {
   const client = await RedisConnection.getClient();
   const key = req.user?._id || req.ip;
   const limit = 5;

@@ -6,13 +6,9 @@ export interface IResponse extends Response {
     status?: number,
     message: string,
     data?: any,
-  }, this>
+  } | null, this>
 };
 
 export interface IRequest extends Request {
   user?: IUser;
-}
-
-export interface IAuthRequest extends IRequest {
-  user: IUser;
 }

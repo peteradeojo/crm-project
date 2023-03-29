@@ -1,5 +1,5 @@
 import express from 'express';
-import AuthRouter from './routes/auth';
+import AppRouter from './routes';
 
 const app = express();
 
@@ -10,6 +10,6 @@ if (app.get('env') !== 'production') {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/auth', AuthRouter());
+app.use('/', AppRouter());
 
 export default app;

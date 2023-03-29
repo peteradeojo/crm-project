@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body, validationResult } from "express-validator";
-import { IResponse } from "../../interfaces";
+import { IRequest, IResponse } from "../../interfaces";
 import { sign, verify } from "jsonwebtoken";
 
 import User from "../../models/User";
@@ -10,7 +10,7 @@ const router = Router();
 export default () => {
   router.post('/login',
     body(['email', 'password']).isString().trim(),
-    async (req, res: IResponse) => {
+    async (req: IRequest, res: IResponse) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ data: errors.array(), message: errors.array()[0].msg });
@@ -39,7 +39,7 @@ export default () => {
 
   router.post('/register',
     body(['name', 'email', 'password']).isString().trim(),
-    async (req, res: IResponse) => {
+    async (req: IRequest, res: IResponse) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ data: errors.array(), message: errors.array()[0].msg });
