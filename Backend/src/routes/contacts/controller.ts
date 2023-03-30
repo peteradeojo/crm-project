@@ -29,9 +29,9 @@ export default {
 
       await contact.save();
 
-      res.status(200).json({ message: "Contact updated" });
+      return res.status(200).json({ message: "Contact updated", data: { contact } });
     } catch (err: any) {
-      res.status(500).json({ message: err.message });
+      return res.status(500).json({ message: err.message });
     }
   },
 
@@ -47,7 +47,7 @@ export default {
     });
 
     try {
-      // await contact.save();
+      await contact.save();
       return res.status(201).json({ message: "Contact created", data: { contact } });
     } catch (err: any) {
       debug(err);
@@ -73,7 +73,7 @@ export default {
 
       await contact.deleteOne();
 
-      return res.status(200).json({ message: "Contact deleted" });
+      return res.status(200).json({ message: "Contact deleted", data: { contact } });
     } catch (err: any) {
       return res.status(500).json({ message: err.message });
     }

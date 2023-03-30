@@ -10,11 +10,11 @@ export default function () {
   router.get("/", async (req: IRequest, res: IResponse) => {
     const user = req.user!;
 
-    const contacts = await Contact.find({ user: user._id });
+    const contacts = await Contact.find({ user: user.id });
 
     return res.status(200).json({
       message: "Contacts fetched",
-      data: contacts,
+      data: { contacts },
     });
   });
 
@@ -41,7 +41,17 @@ export default function () {
       next();
     }, controller.createContact);
 
-  router.patch('/:id', controller.updateContact);
+  router.patch('/:id',
+    body('name').isString().trim().notEmpty().bail(),
+    body('email').isEmail().normalizeEmail().bail(),
+    body('tel').optional(),
+    body('tel.mobile').optional().isArray().withMessage('Mobile phone numbers must be an array of numbers'),
+    body('tel.work').optional().isArray().withMessage('Work phone numbers must be an array of numbers'),
+    body('tel.home').optional().isArray().withMessage('Home phone numbers must be an array of numbers'),
+
+    body('address').optional(),
+    body(['address.street', 'address.city', 'address.state', 'address.zip', 'address.country']).isString().trim().notEmpty().bail(),
+    controller.updateContact);
 
   router.delete('/:id', controller.deleteContact);
 
