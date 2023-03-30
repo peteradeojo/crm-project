@@ -1,7 +1,9 @@
-import { Document, PopulatedDoc } from "mongoose";
-import IUser from "../User/";
+import {Document} from 'mongoose';
 
-export default interface IContact extends Document {
+import IContact from "./Contact/.d";
+import IUser from "./User/.d";
+
+export interface ICompany extends Document {
   name: string;
   email?: string;
   tel?: {
@@ -16,5 +18,6 @@ export default interface IContact extends Document {
     zip?: string;
     country: string;
   };
-  user: PopulatedDoc<IUser>;
+  contacts: IContact[];
+  user: IUser;
 }
