@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
 import * as config from "../config";
-const debug = require('debug')('app:database');
+const debug = require("debug")("app:database");
 
+mongoose.set("toJSON", { virtuals: true });
 export default class MongoConnection {
   private static connection: typeof mongoose | null = null;
 

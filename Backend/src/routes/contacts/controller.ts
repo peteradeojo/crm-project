@@ -1,7 +1,8 @@
-import { IRequest, IResponse } from "../../interfaces"
+import { IRequest, IResponse } from "../../interfaces";
 import Contact from "../../models/Contact";
+import ContactNote from "../../models/ContactNote";
 
-const debug = require('debug')('app:contacts-controller');
+const debug = require("debug")("app:contacts-controller");
 
 export default {
   updateContact: async (req: IRequest, res: IResponse) => {
@@ -78,4 +79,26 @@ export default {
       return res.status(500).json({ message: err.message });
     }
   },
-}
+
+  addNoteToContact: async (req: IRequest, res: IResponse) => {
+    const { title, text } = req.body;
+    const { id } = req.params;
+
+    try {
+      const contact = await Contact.findById(id);
+      if (!contact) {
+        return res.status(404).json({ message: "Contact not found" });
+      }
+
+      const note = await ContactNote.create({
+        title,
+        body: text,
+        contact: contact._id,
+      });
+
+      return res.status(201).json({ message: "Note created", data: { note } });
+    } catch (err: any) {
+      return res.status(500).json({ message: err.message });
+    }
+  },
+};
