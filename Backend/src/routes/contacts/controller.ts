@@ -36,7 +36,7 @@ export default {
   },
 
   createContact: async (req: IRequest, res: IResponse) => {
-    const { name, email, tel, address } = req.body;
+    const { name, email, tel, address, notes } = req.body;
 
     const contact = new Contact({
       name,

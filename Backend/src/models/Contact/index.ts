@@ -51,6 +51,10 @@ const contactSchema = new Schema<IContact>({
     ref: 'User',
     required: true,
   },
+  notes: [{
+    title: String,
+    text: String,
+  }]
 }, {
   timestamps: true,
 });
