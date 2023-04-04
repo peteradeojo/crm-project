@@ -16,5 +16,7 @@
   "bugs": {
     "url": "https://github.com/peteradeojo/crm-project/issues"
   },
-  "homepage": "https://github.com/peteradeojo/crm-project#readme"
+  "homepage": "https://github.com/peteradeojo/crm-project#readme",
+  "dependencies": {},
+  "devDependencies": {}
 }
